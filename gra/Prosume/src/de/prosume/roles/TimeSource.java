@@ -96,8 +96,7 @@ public class TimeSource extends Agent {
 									 reply.setOntology("help");
 						 }
 						 		
-						 myAgent.send(reply);
-						
+						 myAgent.send(reply);						
 				 }
 		 }
 	}

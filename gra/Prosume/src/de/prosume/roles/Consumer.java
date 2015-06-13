@@ -1,5 +1,7 @@
 package de.prosume.roles;
 
+import java.io.IOException;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -9,6 +11,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import de.prosume.MeterReading;
 
 /**
  * Implementiert einen Verbraucher mit einen dedizierten Zählerstand zu jedem Zeitpunkt und einem Bedarf für die kommenden Slots
@@ -22,8 +25,9 @@ public class Consumer extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = 3871835569624140539L;
-
-	private long current_meter_reading=0;
+	public MeterReading currentMeterReading = new MeterReading(0,0); // Hält den aktuellen Zählerstand der Messtelle (Zählpunkt)
+	
+	
 	private long last_slot_confirmed=0;
 	private String metergateway=null;
 	
@@ -53,6 +57,10 @@ public class Consumer extends Agent {
 							String content = msg.getContent();
 							
 							long l = Long.parseLong(content);
+							if(l!=c.last_slot_confirmed) {
+								// neuer Slot erkannt, d.h der Zählerstand kann / muss verändert werden
+								c.prosume();
+							}
 							c.last_slot_confirmed=l;
 					}
 				}				
@@ -62,6 +70,15 @@ public class Consumer extends Agent {
 		 			 
 		this.findMeterGateway();	 
 		 		 
+	}
+	
+	/**
+	 * Wird aufgerufen, sobald ein neuer Slot erkannt wurde
+	 * In der Referenzimplementierung für einen Consumer wird lediglich der Verbauch weitergeschrieben
+	 * 
+	 */
+	public void prosume() {
+		this.consume();		
 	}
 	
 	/**
@@ -129,25 +146,36 @@ public class Consumer extends Agent {
 	 * Übermittlung des aktuellen Zählerstandes an ein Metergateway
 	 */
 	public void transmitReading() {
-		this.consume(); // In der Referenzimplementierung genügt es einfach etwas den Ablesewert zu erhöhen
+		
+		
 		
 		if(this.metergateway!=null) {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(new AID(this.metergateway,AID.ISGUID));
 			msg.setLanguage("prosume");
-			msg.setOntology("meter-reading");		
-			msg.setContent(String.valueOf(this.current_meter_reading));
+			msg.setOntology("meter-reading");					
+			try {
+				msg.setContentObject(this.currentMeterReading);
+			} catch (IOException e) {
+				System.err.println("Fehler beim Serialisieren des Zählerstandes");
+				e.printStackTrace();
+			}
 			send(msg);
 			/* Nach dem Senden des Readings erwarten wir als Feedback vom MG eine Nachricht mit der Slot Nummer 
 			 */
 		} else {
 			System.err.println("Metergateway==null@"+this.getName());			
 		}
-		
 	}
 	
 	public void consume() {
-			this.current_meter_reading+=Math.random()*1000;			
+		long consume = this.currentMeterReading.getConsume();
+		consume+=Math.random()*1000;
+		this.currentMeterReading.setConsume(consume);
+	}
+	
+	public void produce() {
+		// Nicht zu implementieren bei einem  reinen Consumer		
 	}
 	
 }

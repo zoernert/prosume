@@ -11,7 +11,10 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import de.prosume.roles.metergateway.*;
+import de.prosume.MeterReading;
+
 /**
  * Implementiert einen Messstellenbetreiber 
  * @author Thorsten Zoerner
@@ -124,12 +127,7 @@ public class MeterGateway extends Agent {
 			this.myAgent=myAgent;
 			
 		}
-		
-		
-		 /**
-		 * 
-		 */
-		
+			
 
 		public void action() {
 				 ACLMessage msg = myAgent.receive();
@@ -137,14 +135,20 @@ public class MeterGateway extends Agent {
 				 if (msg != null) {
 					 if(msg.getOntology().equals("meter-reading")) {
 						 
-						 long reading = Long.parseLong(msg.getContent());
+						 MeterReading mr = null;
+						try {
+							mr = (MeterReading) msg.getContentObject();
+						} catch (UnreadableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						 
 						 Meter meter = (Meter) myAgent.meters.get(msg.getSender().getName());
 						 if(meter==null) {
-							 	meter = new Meter(msg.getSender().getName(),reading);
+							 	meter = new Meter(msg.getSender().getName(),mr);
 							 	myAgent.meters.put(msg.getSender().getName(), meter);							 	
 						 }
-						 meter.updateReading(reading, myAgent.current_network_time_slot);						 
+						 meter.updateReading(mr, myAgent.current_network_time_slot);						 
 						 ACLMessage reply = msg.createReply();		
 						 reply.setOntology("timeslot");
 						 reply.setPerformative(ACLMessage.INFORM);						 

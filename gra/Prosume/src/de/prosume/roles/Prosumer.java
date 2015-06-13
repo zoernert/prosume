@@ -27,7 +27,9 @@ public class Prosumer extends Consumer {
 	@Override
 	public void produce() {
 		// TODO Auto-generated method stub
-		super.produce();
+		long produce=this.currentMeterReading.getProduce();
+		produce+=Math.round(Math.random()*1000);
+		this.currentMeterReading.setProduce(produce);
 	}
 
 	
