@@ -29,9 +29,9 @@ public class Main {
 	    AgentContainer ac = rt.createAgentContainer(p);
 	    try {
 	    	
-			AgentController timeServer = ac.createNewAgent("TimeSource", "de.prosume.roles.TimeSource", new Object[0]);
+			AgentController timeServer = ac.createNewAgent("TimeSource-network", "de.prosume.roles.TimeSource", new Object[0]);
 			timeServer.start();
-			AgentController metergateway = ac.createNewAgent("MeterGateway", "de.prosume.roles.MeterGateway", new Object[0]);
+			AgentController metergateway = ac.createNewAgent("MeterGateway-init", "de.prosume.roles.MeterGateway", new Object[0]);
 			metergateway.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
