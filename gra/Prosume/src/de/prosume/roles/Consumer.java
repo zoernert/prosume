@@ -49,6 +49,11 @@ public class Consumer extends Agent {
 		 
 		 // Empfangen von Bestätigungen des MeterGateway
 		 this.addBehaviour(new CyclicBehaviour() {			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -8962381067153533057L;
+
 			public void action() {
 				ACLMessage msg = myAgent.receive();
 				if (msg != null) {
@@ -91,6 +96,11 @@ public class Consumer extends Agent {
 	private void findMeterGateway() {
 		TickerBehaviour ticker = new TickerBehaviour(this,5000) {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4850258900636205628L;
+
 			@Override
 			protected void onTick() {
 				Consumer consumer = (Consumer) this.getAgent();
@@ -129,6 +139,11 @@ public class Consumer extends Agent {
 					// TODO: Dynamische Bestimmung, wie oft eine Ablesung erfolgen soll
 					
 					TickerBehaviour send_readings = new TickerBehaviour(consumer,5000) {
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 6494586873449135655L;
+
 						protected void onTick() {
 								transmitReading();							
 						}

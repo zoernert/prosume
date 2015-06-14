@@ -11,6 +11,11 @@ public class Prosumer extends Consumer {
 
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6253471281274556570L;
+
 	@Override
 	public void prosume() {
 		// TODO Auto-generated method stub

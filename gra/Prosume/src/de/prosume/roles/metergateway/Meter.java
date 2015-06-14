@@ -19,8 +19,25 @@ public class Meter {
 		this.address=address;		
 	}
 	
-	public Meter(String name, MeterReading mr) {
-		// TODO Auto-generated constructor stub
+	public Meter(String address, MeterReading mr) {
+			this.address=address;
+			this.lastReading=mr;
+	}
+
+	public MeterReading getLastReading() {
+		return lastReading;
+	}
+
+	public void setLastReading(MeterReading lastReading) {
+		this.lastReading = lastReading;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public void updateReading(MeterReading lastreading,long network_timeslot) {

@@ -9,6 +9,10 @@ import java.io.Serializable;
  *
  */
 public class MeterReading implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7638823165898359277L;
 	private long produce=0;
 	private long consume=0;
 	

@@ -1,7 +1,6 @@
 package de.prosume.roles;
 
 import jade.core.Agent;
-import jade.core.Runtime;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;

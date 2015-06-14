@@ -29,7 +29,7 @@ public class MeterGateway extends Agent {
 	private long current_network_time_slot=0;
 	private String timesource=null;
 	
-	private HashMap meters = new HashMap(); // Hällt alle Meter (nach Adresse)
+	private HashMap<String, Meter> meters = new HashMap<String, Meter>(); // Hällt alle Meter (nach Adresse)
 	
 	/**
 	 * Anmelden eines Metergateway als Agent im Netzwerk
@@ -60,6 +60,11 @@ public class MeterGateway extends Agent {
 	 */
 	private void findTimeSource() {
 		TickerBehaviour ticker = new TickerBehaviour(this,5000) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4369694717092608918L;
 
 			@Override
 			protected void onTick() {
@@ -92,6 +97,11 @@ public class MeterGateway extends Agent {
 						 	// TODO : Fixer Zeitwert von 5 Sekunden für den Abruf der aktuellen Slot - Sollte dynamisch sein
 						 	myAgent.addBehaviour( new TickerBehaviour(myAgent,5000) {
 
+								/**
+								 * 
+								 */
+								private static final long serialVersionUID = -4460633271199160363L;
+
 								@Override
 								protected void onTick() {
 									MeterGateway myAgent = (MeterGateway) this.myAgent;
@@ -121,6 +131,10 @@ public class MeterGateway extends Agent {
 	
 	private class MeterGatewayService extends CyclicBehaviour {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2315692275655701740L;
 		MeterGateway myAgent;
 		
 		MeterGatewayService(MeterGateway myAgent) {
