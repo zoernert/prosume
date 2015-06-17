@@ -33,6 +33,8 @@ public class Main {
 			timeServer.start();
 			AgentController metergateway = ac.createNewAgent("MeterGateway-init", "de.prosume.roles.MeterGateway", new Object[0]);
 			metergateway.start();
+			AgentController trader = ac.createNewAgent("Trader-init", "de.prosume.roles.Trader", new Object[0]);
+			trader.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

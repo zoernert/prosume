@@ -96,6 +96,8 @@ public class TimeSource extends Agent {
 						 }
 						 		
 						 myAgent.send(reply);						
+				 } else {
+					 block();
 				 }
 		 }
 	}

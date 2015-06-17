@@ -14,7 +14,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import de.prosume.roles.metergateway.*;
 import de.prosume.MeterReading;
-
+import de.prosume.DelegateTrades;
+import de.prosume.Trade;
 /**
  * Implementiert einen Messstellenbetreiber 
  * @author Thorsten Zoerner
@@ -147,6 +148,24 @@ public class MeterGateway extends Agent {
 				 ACLMessage msg = myAgent.receive();
 				 
 				 if (msg != null) {
+					 if(msg.getOntology().equals("delegate-trades")) {
+						 Meter meter = (Meter) myAgent.meters.get(msg.getSender().getName());
+						 DelegateTrades delegation;
+						 ACLMessage reply = msg.createReply();
+						 reply.setOntology("delegate-trades");
+						 reply.setPerformative(ACLMessage.DISCONFIRM);
+						try {
+							delegation = (DelegateTrades) msg.getContentObject();
+							meter.setDelegation(delegation);
+							reply.setPerformative(ACLMessage.CONFIRM);
+						} catch (UnreadableException e) {
+							// TODO: Tracer sollte die Antwort überprüfen 
+							e.printStackTrace();
+						}
+						 myAgent.send(reply);
+						 
+						 
+					 }
 					 if(msg.getOntology().equals("meter-reading")) {
 						 
 						 MeterReading mr = null;
@@ -178,6 +197,29 @@ public class MeterGateway extends Agent {
 							 System.err.println("Received Timeslot of unknown source: "+msg.getSender().getName());
 						 }
 					 }
+					 if(msg.getOntology().equals("trade")) {
+						 /*
+						  * Überprüfen, ob Trader für den Meter handeln darf
+						  * In den Tradespeicher schreiben
+						  * Berücksichtigen bei der Slot-Bilanzierung
+						  * Bestätigungen senden (an anderes Gateway)->Bilanzierung
+						  * 
+						  */
+						 System.out.println("Ontologie: trade nicht implementiert!");
+						 try {
+							Trade t = (Trade) msg.getContentObject();
+							System.out.println("From: "+t.getFromGateway());
+							System.out.println("To: "+t.getToGateway());
+							System.out.println("Power: "+t.getPower()+"@"+t.getSlot());
+							
+						} catch (UnreadableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						 
+					 }
+				 } else {
+					 block();
 				 }
 		 }
 	}
