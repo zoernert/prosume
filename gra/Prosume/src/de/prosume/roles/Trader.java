@@ -1,12 +1,5 @@
 package de.prosume.roles;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import de.prosume.DelegateTrades;
-import de.prosume.Trade;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -17,6 +10,13 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import de.prosume.DelegateTrades;
+import de.prosume.Trade;
 
 /**
  * Ein Trader führt Handelsgeschäfte zwischen den verschiedenen Consumer/Prosumern durch. Dazu sind mögliche Trades für einen Zeitslot zu erkennen und im anschluss durchzuführen.
@@ -204,7 +204,8 @@ public class Trader extends Agent {
 						if(buyer!=null) {
 							if(buyer.getSlot()==seller.getSlot()) {
 									Trade trade = new Trade();
-									trade.setCertificate("xxxxx"); //TODO Zertifikat holen
+									trade.setCertificate_from(seller.getCertificate());
+									trade.setCertificate_to(buyer.getCertificate());
 									trade.setFromGateway(seller.getMeterGateway());
 									trade.setToGateway(buyer.getMeterGateway());
 									trade.setPower(Math.round(Math.random()*500)); // TODO Sinvolle Handelsgröße angeben! Random zur Untersuchung der Kommunikation

@@ -31,7 +31,7 @@ public class MeterGateway extends Agent {
 	private String timesource=null;
 	
 	private HashMap<String, Meter> meters = new HashMap<String, Meter>(); // Hällt alle Meter (nach Adresse)
-	
+	private HashMap<String,DelegateTrades> delegations = new HashMap<String,DelegateTrades>(); // Mapping zwischen Zertifikat und Delegation
 	/**
 	 * Anmelden eines Metergateway als Agent im Netzwerk
 	 */
@@ -155,9 +155,11 @@ public class MeterGateway extends Agent {
 						 reply.setOntology("delegate-trades");
 						 reply.setPerformative(ACLMessage.DISCONFIRM);
 						try {
-							delegation = (DelegateTrades) msg.getContentObject();
-							meter.setDelegation(delegation);
+							delegation = (DelegateTrades) msg.getContentObject();							
 							reply.setPerformative(ACLMessage.CONFIRM);
+							delegation.setCertificate(Long.toString(System.currentTimeMillis()));
+							meter.setDelegation(delegation);
+							myAgent.delegations.put(delegation.getCertificate(),delegation);
 						} catch (UnreadableException e) {
 							// TODO: Tracer sollte die Antwort überprüfen 
 							e.printStackTrace();
@@ -209,8 +211,11 @@ public class MeterGateway extends Agent {
 						 try {
 							Trade t = (Trade) msg.getContentObject();
 							System.out.println("From: "+t.getFromGateway());
+							System.out.println("Zertifikat From:"+t.getCertificate_from());
 							System.out.println("To: "+t.getToGateway());
+							System.out.println("Zertifikat To:"+t.getCertificate_to());
 							System.out.println("Power: "+t.getPower()+"@"+t.getSlot());
+							
 							
 						} catch (UnreadableException e) {
 							// TODO Auto-generated catch block

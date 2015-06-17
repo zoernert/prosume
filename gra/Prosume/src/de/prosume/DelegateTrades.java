@@ -17,6 +17,7 @@ public class DelegateTrades implements Serializable {
 	private static final long serialVersionUID = -5182683469042934547L;
 	private String meterGateway="";
 	private long slot=0;
+	
 	public String getCertificate() {
 		return certificate;
 	}

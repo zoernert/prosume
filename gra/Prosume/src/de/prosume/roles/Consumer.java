@@ -70,7 +70,8 @@ public class Consumer extends Agent {
 								c.prosume();
 								// Auftrag senden an Trader, für den nächsten Zeitslot
 								if(c.trader!=null) {
-									DelegateTrades dt = new DelegateTrades(c.metergateway,l+1,c.trader,this.toString()); //TODO Zertifikat wirklich setzen
+									DelegateTrades dt = new DelegateTrades(c.metergateway,l+1,c.trader,System.currentTimeMillis()+"@"+this.myAgent.getAID().getName()); //TODO Zertifikat wirklich setzen
+									
 									ACLMessage trademsg = new ACLMessage(ACLMessage.REQUEST);
 									trademsg.addReceiver(new AID(c.trader,AID.ISGUID));
 									trademsg.addReceiver(new AID(c.metergateway,AID.ISGUID));

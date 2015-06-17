@@ -19,7 +19,9 @@ public class Trade implements Serializable {
 	private String toGateway=null;
 	private long power=0;
 	private long slot=0;
-	private String certificate=null;
+	private String certificate_from=null;
+	private String certificate_to=null;
+	
 	public String getFromGateway() {
 		return fromGateway;
 	}
@@ -44,12 +46,19 @@ public class Trade implements Serializable {
 	public void setSlot(long slot) {
 		this.slot = slot;
 	}
-	public String getCertificate() {
-		return certificate;
+	public String getCertificate_from() {
+		return certificate_from;
 	}
-	public void setCertificate(String certificate) {
-		this.certificate = certificate;
+	public void setCertificate_from(String certificate_from) {
+		this.certificate_from = certificate_from;
 	}
+	public String getCertificate_to() {
+		return certificate_to;
+	}
+	public void setCertificate_to(String certificate_to) {
+		this.certificate_to = certificate_to;
+	}
+	
 	
 	
 
